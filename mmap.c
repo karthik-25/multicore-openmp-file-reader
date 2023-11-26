@@ -118,18 +118,18 @@ int main(int argc, char *argv[]) {
     }
     end = omp_get_wtime();
 
-    printf("Total read: %d\n", read_counter);
+    printf("\nTotal read: %d\n", read_counter);
     printf("Execution time: %f\n", end-start);
 
 
-    printf("Rand Chunks selected: ");
+    printf("\nRand Chunks selected: ");
     int size = sizeof(rand_chunks_time) / sizeof(rand_chunks_time[0]);
     for (int i = 0; i < size; i++) {
         printf("%ld ", rand_chunks[i]);
     }
     printf("\n");
 
-    printf("STATS: Average Response Time:%f\nMax Response Time:%f\nMin Response Time:%f\n", findAverage(rand_chunks_time, size), findMax(rand_chunks_time, size), findMin(rand_chunks_time, size));
+    printf("STATS:\nAverage Response Time:%f\nMax Response Time:%f\nMin Response Time:%f\n", findAverage(rand_chunks_time, size), findMax(rand_chunks_time, size), findMin(rand_chunks_time, size));
 
     munmap(file_data, sb.st_size);
     close(fd);
