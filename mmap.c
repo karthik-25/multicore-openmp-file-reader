@@ -81,10 +81,13 @@ int main(int argc, char *argv[]) {
 
     // get file size and calculate number of chunks
     struct stat sb;
-    stat(filepath, &sb);
+    if(stat(filepath, &sb) == -1){
+        fprintf(stderr, "Error: Failed to get file size.");
+        exit(EXIT_FAILURE);
+    }
     int num_chunks = sb.st_size / CHUNK_SIZE + (sb.st_size % CHUNK_SIZE == 0 ? 0 : 1);
     printf("file size: %d\n", (int) sb.st_size);
-    printf("num of chunks: %d\n", num_chunks);
+    printf("num of chunks: %d\n\n", num_chunks);
 
     long rand_chunks[10];
     double rand_chunks_time[10];
@@ -97,6 +100,10 @@ int main(int argc, char *argv[]) {
 
     // open file and memory map it
     int fd = open(filepath, O_RDONLY);
+    if (fd == -1) {
+        fprintf(stderr, "Error: Failed to open input file.");
+        exit(EXIT_FAILURE);
+    }
     char* file_data = mmap(NULL, sb.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
 
     // read file chunks in parallel
@@ -110,6 +117,7 @@ int main(int argc, char *argv[]) {
             read_counter++;
         }
 
+        // for reading specific chunks
         int idx = isNumberPresent(rand_chunks, sizeof(rand_chunks) / sizeof(rand_chunks[0]), i);
         if(idx!=-1){
             rand_chunks_time[idx] = omp_get_wtime() - start;
@@ -118,11 +126,11 @@ int main(int argc, char *argv[]) {
     }
     end = omp_get_wtime();
 
-    printf("\nTotal read: %d\n", read_counter);
-    printf("Execution time: %f\n", end-start);
+    printf("Total read: %d\n", read_counter);
+    printf("Execution time: %f\n\n", end-start);
 
 
-    printf("\nRand Chunks selected: ");
+    printf("Rand Chunks selected: ");
     int size = sizeof(rand_chunks_time) / sizeof(rand_chunks_time[0]);
     for (int i = 0; i < size; i++) {
         printf("%ld ", rand_chunks[i]);
