@@ -123,6 +123,7 @@ int main(int argc, char *argv[]) {
 
 
     printf("Rand Chunks selected: ");
+    int size = sizeof(rand_chunks_time) / sizeof(rand_chunks_time[0]);
     for (int i = 0; i < size; i++) {
         printf("%ld ", rand_chunks[i]);
     }
