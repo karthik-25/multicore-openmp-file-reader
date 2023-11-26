@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
     struct stat sb;
     stat(filepath, &sb);
     int num_chunks = sb.st_size / CHUNK_SIZE + (sb.st_size % CHUNK_SIZE == 0 ? 0 : 1);
-    printf("file size: %d\n", sb.st_size);
+    printf("file size: %d\n", (int) sb.st_size);
     printf("num of chunks: %d\n", num_chunks);
 
     long rand_chunks[10];
