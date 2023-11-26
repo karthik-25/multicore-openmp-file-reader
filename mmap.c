@@ -27,6 +27,7 @@ int main(int argc, char *argv[]) {
 
     // calculate number of chunks
     int num_chunks = sb.st_size / CHUNK_SIZE + (sb.st_size % CHUNK_SIZE == 0 ? 0 : 1);
+    printf("num of chunks: %d\n", num_chunks);
 
     // memory map file
     char* file_data = mmap(NULL, sb.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
@@ -46,7 +47,7 @@ int main(int argc, char *argv[]) {
     }
     end = omp_get_wtime();
 
-    printf("There are %d 'a's in the file.\n", global_counter);
+    printf("There are %d 'A's in the file.\n", global_counter);
     printf("Execution time: %f\n", end-start);
 
     close(fd);
