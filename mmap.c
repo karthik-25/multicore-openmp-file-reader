@@ -18,18 +18,17 @@ int main(int argc, char *argv[]) {
     double start, end;
     int global_counter = 0;
 
-    start = omp_get_wtime();
-
-    // open file and get file size
-    int fd = open(filepath, O_RDONLY);
+    // get file size and calculate number of chunks
     struct stat sb;
-    fstat(fd, &sb);
-
-    // calculate number of chunks
+    stat(filepath, &sb);
     int num_chunks = sb.st_size / CHUNK_SIZE + (sb.st_size % CHUNK_SIZE == 0 ? 0 : 1);
     printf("num of chunks: %d\n", num_chunks);
 
-    // memory map file
+    // start timer
+    start = omp_get_wtime();
+
+    // open file and memory map it
+    int fd = open(filepath, O_RDONLY);
     char* file_data = mmap(NULL, sb.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
 
     // read file chunks in parallel
